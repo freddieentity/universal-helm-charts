@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.fullnameOverride }}
+  labels:
+    {{- include "microservices-standard.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  {{- range $key, $val := .Values.service.ports }}
+  - name: {{ $val.name }}
+    targetPort: {{ $val.containerPort }}
+    port: {{ $val.port }}
+    protocol: TCP
+  {{- end }}
+  selector:
+    {{- include "microservices-standard.selectorLabels" . | nindent 4 }}

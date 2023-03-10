@@ -1,0 +1,39 @@
+dependencies:
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+- name: microservices-standard
+  repository: ""
+  version: 1.0.0
+digest: sha256:1d49df031e87efe8b316bdb0785b4443d88a5d40ba47905ea3c192b93dbeb7d0
+generated: "2023-03-10T11:11:57.165965+07:00"

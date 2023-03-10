@@ -1,0 +1,40 @@
+apiVersion: v2
+name: onlineboutique
+version: 1.0.0
+dependencies:
+  - name: microservices-standard
+    alias: adservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: cartservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: checkoutservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: currencyservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: emailservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: frontend
+    version: 1.0.0
+  - name: microservices-standard
+    alias: loadgenerator
+    version: 1.0.0
+  - name: microservices-standard
+    alias: paymentservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: productcatalogservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: recommendationservice
+    version: 1.0.0
+  - name: microservices-standard
+    alias: redis
+    version: 1.0.0
+  - name: microservices-standard
+    alias: shippingservice
+    version: 1.0.0

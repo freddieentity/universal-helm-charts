@@ -1,0 +1,724 @@
+adservice:
+  fullnameOverride: adservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/adservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 9555
+        containerPort: 9555
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: adservice
+    annotations: {}
+    hosts:
+      - host: adservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 9555
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:9555"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:9555"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 9555
+      DISABLE_TRACING: 1
+      DISABLE_STATS: 1
+    secretData: {}
+    secretDataString: {}
+  
+  persistentVolumeClaim:
+    enabled: false
+    # storageClassName: standard
+    # accessModes: ReadWriteOnce
+    # storage: 20Gi
+    # mountPath: /var/www/html  
+
+cartservice:
+  fullnameOverride: cartservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/cartservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 7070
+        containerPort: 7070
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: cartservice
+    annotations: {}
+    hosts:
+      - host: cartservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 7070
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:9555"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:9555"]
+  
+  environment:
+    enabled: true
+    configmap:
+      REDIS_ADDR: redis-cart:6379
+    secretData: {}
+    secretDataString: {}
+
+checkoutservice:
+  fullnameOverride: checkoutservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/checkoutservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 5050
+        containerPort: 5050
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: checkoutservice
+    annotations: {}
+    hosts:
+      - host: checkoutservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 5050
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:5050"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:5050"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 5050
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      SHIPPING_SERVICE_ADDR: shippingservice:50051
+      PAYMENT_SERVICE_ADDR: paymentservice:50051
+      EMAIL_SERVICE_ADDR: emailservice:5000
+      CURRENCY_SERVICE_ADDR: currencyservice:7000
+      CART_SERVICE_ADDR: cartservice:7070
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+      DISABLE_STATS: 1
+    secretData: {}
+    secretDataString: {}
+
+currencyservice:
+  fullnameOverride: currencyservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/currencyservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 7000
+        containerPort: 7000
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: currencyservice
+    annotations: {}
+    hosts:
+      - host: currencyservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 7000
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:7000"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:7000"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 7000
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+      DISABLE_DEBUGGER: 1
+    secretData: {}
+    secretDataString: {}
+
+emailservice:
+  fullnameOverride: emailservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/emailservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 5000
+        containerPort: 8080
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: emailservice
+    annotations: {}
+    hosts:
+      - host: emailservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 5000
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 8080
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+    secretData: {}
+    secretDataString: {}
+
+frontend:
+  fullnameOverride: frontend
+  image:
+    repository: gcr.io/google-samples/microservices-demo/frontend
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: http
+        port: 80
+        containerPort: 8080
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: frontend
+    annotations: {}
+    hosts:
+      - host: frontend.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: http
+              port: 
+                number: 80
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    readinessProbe:
+      initialDelaySeconds: 10
+      httpGet:
+        path: "/_healthz"
+        port: 8080
+        httpHeaders:
+        - name: "Cookie"
+          value: "shop_session-id=x-readiness-probe"
+    livenessProbe:
+      initialDelaySeconds: 10
+      httpGet:
+        path: "/_healthz"
+        port: 8080
+        httpHeaders:
+        - name: "Cookie"
+          value: "shop_session-id=x-liveness-probe"
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 8080
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      SHIPPING_SERVICE_ADDR: shippingservice:50051
+      CURRENCY_SERVICE_ADDR: currencyservice:7000
+      CART_SERVICE_ADDR: cartservice:7070
+      RECOMMENDATION_SERVICE_ADDR: recommendationservice:8080
+      CHECKOUT_SERVICE_ADDR: checkoutservice:5050
+      AD_SERVICE_ADDR: adservice:9555
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+    secretData: {}
+    secretDataString: {}
+
+loadgenerator:
+  fullnameOverride: loadgenerator
+  image:
+    repository: gcr.io/google-samples/microservices-demo/loadgenerator
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 8080
+        containerPort: 8080
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: loadgenerator
+    annotations: {}
+    hosts:
+      - host: loadgenerator.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 8080
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+  
+  environment:
+    enabled: true
+    configmap:
+      USERS: 10
+      FRONTEND_ADDR: frontend:80
+    secretData: {}
+    secretDataString: {}
+
+paymentservice:
+  fullnameOverride: paymentservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/paymentservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 50051
+        containerPort: 50051
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: paymentservice
+    annotations: {}
+    hosts:
+      - host: paymentservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 50051
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:50051"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:50051"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 50051
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+      DISABLE_DEBUGGER: 1
+    secretData: {}
+    secretDataString: {}
+
+productcatalogservice:
+  fullnameOverride: productcatalogservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/productcatalogservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 3550
+        containerPort: 3550
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: productcatalogservice
+    annotations: {}
+    hosts:
+      - host: productcatalogservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 3550
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:3550"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:3550"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 3550
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+      DISABLE_DEBUGGER: 1
+    secretData: {}
+    secretDataString: {}
+
+recommendationservice:
+  fullnameOverride: recommendationservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/recommendationservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 8080
+        containerPort: 8080
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: recommendationservice
+    annotations: {}
+    hosts:
+      - host: recommendationservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 8080
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+
+    readinessProbe:
+      initialDelaySeconds: 20
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+  
+  environment:
+    enabled: true
+    configmap:
+      PORT: 8080
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+      DISABLE_DEBUGGER: 1
+    secretData: {}
+    secretDataString: {}
+
+redis:
+  fullnameOverride: redis-cart
+  image:
+    repository: redis
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "alpine"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: http
+        port: 6379
+        containerPort: 6379
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: redis
+    annotations: {}
+    hosts:
+      - host: redis.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 6379
+
+    tls: []
+
+  healthcheck:
+    enabled: false
+    readinessProbe:
+      periodSeconds: 5
+      tcpSocket:
+        port: 6379
+    livenessProbe:
+      periodSeconds: 5
+      tcpSocket:
+        port: 6379
+  
+  environment:
+    enabled: false
+    configmap: {}
+    secretData: {}
+    secretDataString: {}
+  
+  volumesData:
+    enabled: true
+    volumes:
+      - name: redis-data
+        emptyDir: {}
+    volumeMounts:
+      - mountPath: /data
+        name: redis-data
+
+shippingservice:
+  fullnameOverride: shippingservice
+  image:
+    repository: gcr.io/google-samples/microservices-demo/shippingservice
+
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.5"
+    
+  service:
+    type: ClusterIP
+    name: ""
+    ports:
+      - name: grpc
+        port: 50051
+        containerPort: 50051
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    name: shippingservice
+    annotations: {}
+    hosts:
+      - host: shippingservice.127.0.0.1.nip.io
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grpc
+              port: 
+                number: 50051
+
+    tls: []
+
+  healthcheck:
+    enabled: true
+    livenessProbe:
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:50051"]
+
+    readinessProbe:
+      periodSeconds: 5
+      exec:
+        command: ["/bin/grpc_health_probe", "-addr=:50051"]
+
+  environment:
+    enabled: true
+    configmap:
+      PORT: 50051
+      DISABLE_TRACING: 1
+      DISABLE_PROFILER: 1
+      DISABLE_DEBUGGER: 1
+    secretData: {}
+    secretDataString: {}
