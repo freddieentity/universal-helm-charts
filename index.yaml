@@ -1,14 +1,14 @@
 apiVersion: v1
 entries:
-  onlineboutique:
+  microservices-standard:
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2023-03-11T18:45:25.292907+07:00"
+    created: "2023-03-11T18:49:57.113901+07:00"
     description: A Helm chart for Kubernetes
-    digest: 489ec6c8268593b382e6eea868b1e62b42e9d81897360c4a394b3c5da53279f1
-    name: onlineboutique
+    digest: 5702c214f64d85cb77ff533deb7f191f9085cce109d96637fdd3576f089e4bbf
+    name: microservices-standard
     type: application
     urls:
-    - https://freddieentity.github.io/universal-helm-charts/onlineboutique-1.0.0.tgz
+    - https://freddieentity.github.io/universal-helm-charts/packages/microservices-standard-1.0.0.tgz
     version: 1.0.0
-generated: "2023-03-11T18:45:25.289575+07:00"
+generated: "2023-03-11T18:49:57.113+07:00"
